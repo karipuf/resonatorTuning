@@ -5,7 +5,7 @@
 from argparse import ArgumentParser
 ap=ArgumentParser()
 ap.add_argument('-n',help="Number of parameter sets to attempt (default 50)")
-ap.add_argument('-e',help='Number of epochs to train for (default 800)')
+ap.add_argument('-e',help='Number of epochs to train for (default 1200)')
 ap.add_argument('-f',help='Number of filters in first convolution unit (default: sample from [32,64,96])')
 ap.add_argument('--x1',help='Width of first convolutional filter (default: sample from [5,7,9,11])')
 ap.add_argument('-x',help='Width of subsequent convolutional filters (default: sample from [3,5,7,9])')
@@ -107,7 +107,7 @@ for count in range(nParams):
     #pdb.set_trace()
     pVec=next(pSamper)
     mod=CreatePredictor(pVec,ProcessArg(parsed.l2,0.00001))
-    mod.fit(xtrain.values.reshape((-1,256,1)),ytrain.values,batch_size=128,epochs=ProcessArg(parsed.e,800))
+    mod.fit(xtrain.values.reshape((-1,256,1)),ytrain.values,batch_size=128,epochs=ProcessArg(parsed.e,1200))
     ofile=open(outFile,'a+')
     ofile.write(str(pVec)+'\n')
     ofile.write('Score: '+str(mod.evaluate(xtest.values.reshape((-1,256,1)),ytest))+'\n')
