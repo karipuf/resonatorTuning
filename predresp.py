@@ -9,7 +9,7 @@ from keras.layers import Conv1D,Dense,MaxPool1D,AveragePooling1D,GlobalAveragePo
 from keras.optimizers import Adam
 from sklearn.model_selection import train_test_split
 import pandas as pd
-#import pylab as pl
+import pylab as pl
 import numpy as np
 
 #get_ipython().magic('matplotlib notebook')
