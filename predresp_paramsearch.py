@@ -91,6 +91,14 @@ resp.columns=resp.iloc[0,:]
 resp=resp.iloc[1:,:]
 resp=(resp-resp.mean())/resp.std()
 curr=pd.read_csv("Parameters.txt",header=None,sep='\s+')
+
+# Removing ideal resp and current
+idealResp=resp.iloc[0,:]
+resp=resp.iloc[1:,:]
+idealCurr=curr.iloc[0,:]
+curr=curr.iloc[1:,:]
+
+# Creating test and training sets
 xtrain,xtest,ytrain,ytest=train_test_split(resp,curr,test_size=.05)
 
 # Creating and training models!
