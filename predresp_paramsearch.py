@@ -55,12 +55,20 @@ xtrain,xtest,ytrain,ytest=train_test_split(resp,curr,test_size=.05)
 # Creating and training models!
 results=[]
 for count in range(nParams):
-    #pdb.set_trace()
-    pVec=next(pSamper)
-    mod=CreatePredictor(pVec,ProcessArg(parsed.l2,0.00001))
-    mod.fit(xtrain.values.reshape((-1,256,1)),ytrain.values,batch_size=128,epochs=ProcessArg(parsed.e,1200))
-    ofile=open(outFile,'a+')
-    ofile.write(str(pVec)+'\n')
-    ofile.write('Score: '+str(mod.evaluate(xtest.values.reshape((-1,256,1)),ytest))+'\n')
-    ofile.close()
     
+    pVec=next(pSamper)
+
+    try:
+        mod=CreatePredictor(pVec,ProcessArg(parsed.l2,0.00001))
+        mod.fit(xtrain.values.reshape((-1,256,1)),ytrain.values,batch_size=128,epochs=ProcessArg(parsed.e,1200))
+        ofile=open(outFile,'a+')
+        ofile.write(str(pVec)+'\n')
+        ofile.write('Score: '+str(mod.evaluate(xtest.values.reshape((-1,256,1)),ytest))+'\n')
+        ofile.close()
+
+    except ValueError:
+
+        ef=open("ErrorFile","a+")
+        ef.write('Error encountered! pVec is: '+str(pVec)+'\n')
+        ef.close()
+        

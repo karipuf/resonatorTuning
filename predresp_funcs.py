@@ -15,7 +15,7 @@ def ProcessArg(tmp,defaultVal):
     if tmp==None: return defaultVal
     else: return eval(tmp)
 
-def CreatePredictor(paramVec,l2reg,dropProb=.5):
+def CreatePredictor(paramVec,l2reg=.00001,dropProb=.5):
 
     nFilt=paramVec['f']
     nLayers=paramVec['d']
