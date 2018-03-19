@@ -47,7 +47,7 @@ for count in range(nParams):
     
     try:
 
-        tmpScore=TestPredictor(pVec,nEpochs=ProcessArg(parsed.e,1200))
+        tmpScore=TestPredictor(pVec,nEpochs=ProcessArg(parsed.e,1200),patience=3)
         ofile=open(outFile,'a+')
         ofile.write(str(pVec)+'\n')
         ofile.write('Score: '+str(tmpScore)+'\n')
