@@ -73,7 +73,7 @@ def CreatePredictor(paramVec): #,l2reg=.00001):
     mod.compile(optimizer=Adam(lr=learnRate),loss='mse')
     return mod
 
-def TestPredictor(paramVec,randomState=10,nEpochs=1200,batchSize=128,modelFile=None,data=None,patience=1,valSplit=.05,callbacks=[]):
+def TestPredictor(paramVec,randomState=10,nEpochs=1200,batchSize=128,modelFile=None,data=None,valSplit=.05,callbacks=[]):
 
     if data==None:
         xtrain,xtest,idealResp,ytrain,ytest,idealCurr=GetData(randomState=randomState)
@@ -87,3 +87,19 @@ def TestPredictor(paramVec,randomState=10,nEpochs=1200,batchSize=128,modelFile=N
         mod.save(modelFile)
     
     return (mod,mod.evaluate(xtest.values.reshape((-1,256,1)),ytest.values))
+
+# Simple version to use with scikit-opt
+def SP(f,d,lr,fc6,x1,x,drop,l2,nEpochs=1200,valSplit=.05,callbacks=[]):
+
+    paramVec={}
+    paramVec['f']=f
+    paramVec['d']=d
+    paramVec['lr']=lr
+    paramVec['fc6']=fc6
+    paramVec['x1']=x1
+    paramVec['x']=x
+    paramVec['drop']=drop
+    paramVec['l2']=l2
+
+    return TestPredictor(paramVec,nEpochs=nEpochs,valSplit=valSplit,callbacks=callbacks)[1]
+    
