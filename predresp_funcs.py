@@ -15,7 +15,29 @@ def ProcessArg(tmp,defaultVal):
     if tmp==None: return defaultVal
     else: return eval(tmp)
 
-def CreatePredictor(paramVec,l2reg=.00001,dropProb=.5):
+def GetData(testSize=.05,randomState=10,normalize=True):
+
+    # Loading in the data (Response)
+    resp=pd.read_csv("Data.txt",header=None,sep='\s+').T
+    resp.columns=resp.iloc[0,:]
+    resp=resp.iloc[1:,:]
+    if normalize:
+        resp=(resp-resp.mean())/resp.std()
+
+    # "Current" (actually it's the phase and coupling ratios)
+    curr=pd.read_csv("Parameters.txt",header=None,sep='\s+')
+    
+    # Removing ideal resp and current
+    idealResp=resp.iloc[0,:]
+    resp=resp.iloc[1:,:]
+    idealCurr=curr.iloc[0,:]
+    curr=curr.iloc[1:,:]
+
+    # Creating test and training sets
+    xtrain,xtest,ytrain,ytest=train_test_split(resp,curr,test_size=testSize,random_state=randomState)
+    return xtrain,xtest,idealResp,ytrain,ytest,idealCurr
+    
+def CreatePredictor(paramVec): #,l2reg=.00001):
 
     nFilt=paramVec['f']
     nLayers=paramVec['d']
@@ -23,6 +45,8 @@ def CreatePredictor(paramVec,l2reg=.00001,dropProb=.5):
     fc6hidden=paramVec['fc6']
     filtWidth1=paramVec['x1']
     filtWidth=paramVec['x']
+    dropProb=paramVec['drop']
+    l2reg=paramVec['l2']
 
     #keepProb=paramVec['dp']
     #l2reg=paramVec['l2']
@@ -48,3 +72,18 @@ def CreatePredictor(paramVec,l2reg=.00001,dropProb=.5):
     
     mod.compile(optimizer=Adam(lr=learnRate),loss='mse')
     return mod
+
+def TestPredictor(paramVec,randomState=10,nEpochs=1200,batchSize=128,modelFile=None,data=None):
+
+    if data==None:
+        xtrain,xtest,idealResp,ytrain,ytest,idealCurr=GetData(randomState=randomState)
+        mod=CreatePredictor(paramVec)
+    else:
+        (xtrain,xtest,ytrain,ytest)=data;
+        
+    mod.fit(xtrain.values.reshape((-1,256,1)),ytrain.values,batch_size=128,epochs=nEpochs)
+
+    if modelFile!=None:
+        mod.save(modelFile)
+    
+    return mod.evaluate(xtest.values.reshape((-1,256,1)),ytest.values)
