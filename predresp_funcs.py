@@ -89,8 +89,9 @@ def TestPredictor(paramVec,randomState=10,nEpochs=1200,batchSize=128,modelFile=N
     return (mod,mod.evaluate(xtest.values.reshape((-1,256,1)),ytest.values))
 
 # Simple version to use with scikit-opt
-def SP(f,d,lr,fc6,x1,x,drop,l2,nEpochs=1200,valSplit=.05,callbacks=[]):
+def SP(paramList,nEpochs=1200,valSplit=.05,callbacks=[]):
 
+    (f,d,lr,fc6,x1,x,drop,l2)=paramList
     paramVec={}
     paramVec['f']=f
     paramVec['d']=d
