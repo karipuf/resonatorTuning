@@ -39,9 +39,8 @@ pDict={'f':ProcessArg(parsed.f,[32,64,96]),
        'l2':ProcessArg(parsed.l2,[.00001,.00005,.00005])
 }
 
-pSamper=iter(ParameterSampler(pDict,n_iter=nParams,random_state=ProcessArg(parsed.rs,10)))
-
 # Creating and training models!
+pSamper=iter(ParameterSampler(pDict,n_iter=nParams,random_state=ProcessArg(parsed.rs,10)))
 for count in range(nParams):
     
     pVec=next(pSamper)
@@ -54,13 +53,6 @@ for count in range(nParams):
         ofile.write('Score: '+str(tmpScore)+'\n')
         ofile.close()
         
-        #mod=CreatePredictor(pVec)
-        #mod.fit(xtrain.values.reshape((-1,256,1)),ytrain.values,batch_size=128,epochs=ProcessArg(parsed.e,1200))
-        #ofile=open(outFile,'a+')
-        #ofile.write(str(pVec)+'\n')
-        #ofile.write('Score: '+str(mod.evaluate(xtest.values.reshape((-1,256,1)),ytest))+'\n')
-        #ofile.close()
-
     except ValueError:
 
         ef=open("ErrorFile","a+")
