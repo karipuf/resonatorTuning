@@ -73,7 +73,7 @@ def CreatePredictor(paramVec): #,l2reg=.00001):
     mod.compile(optimizer=Adam(lr=learnRate),loss='mse')
     return mod
 
-def TestPredictor(paramVec,randomState=10,nEpochs=1200,batchSize=128,modelFile=None,data=None,earlyStopping=True,patience=1,valSplit=.05):
+def TestPredictor(paramVec,randomState=10,nEpochs=1200,batchSize=128,modelFile=None,data=None,patience=1,valSplit=.05,callbacks=[]):
 
     if data==None:
         xtrain,xtest,idealResp,ytrain,ytest,idealCurr=GetData(randomState=randomState)
@@ -81,13 +81,9 @@ def TestPredictor(paramVec,randomState=10,nEpochs=1200,batchSize=128,modelFile=N
     else:
         (xtrain,xtest,ytrain,ytest)=data;
 
-    if earlyStopping:
-        callbacks=[keras.callbacks.EarlyStopping(patience=patience)]
-    else:
-        callbacks=[]
     mod.fit(xtrain.values.reshape((-1,256,1)),ytrain.values,batch_size=128,epochs=nEpochs,validation_split=valSplit,callbacks=callbacks)
 
     if modelFile!=None:
         mod.save(modelFile)
     
-    return mod.evaluate(xtest.values.reshape((-1,256,1)),ytest.values)
+    return (mod,mod.evaluate(xtest.values.reshape((-1,256,1)),ytest.values))
