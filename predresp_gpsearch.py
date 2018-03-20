@@ -27,7 +27,7 @@ def sp(tmp):
     return SP(tmp,nEpochs=nEpochs)
 
 # Optimizing!!
-space=[Integer(32,256),Integer(2,4),Real(0.00001,0.01),Integer(32,512),Integer(3,12),Integer(3,12),Real(.2,.6),Real(0.000001,0.001)]
+space=[Integer(32,256),Integer(2,4),Real(0.00001,0.01),Integer(32,512),Integer(3,12),Integer(3,12),Real(.2,.6),Real(0.000001,0.001),Integer(1,3)]
 res=gp_minimize(sp,space,n_calls=nCalls)
 
 # Wrapping up

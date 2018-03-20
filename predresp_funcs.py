@@ -47,7 +47,8 @@ def CreatePredictor(paramVec): #,l2reg=.00001):
     filtWidth=paramVec['x']
     dropProb=paramVec['drop']
     l2reg=paramVec['l2']
-
+    filtAdd=paramVec['fa']
+    
     #keepProb=paramVec['dp']
     #l2reg=paramVec['l2']
 
@@ -61,7 +62,7 @@ def CreatePredictor(paramVec): #,l2reg=.00001):
 
     # Adding subsequent layers
     for count in range(1,nLayers):
-        mod.add(Conv1D(count*nFilt,(filtWidth,),activation='relu',kernel_regularizer=l2))
+        mod.add(Conv1D((filtAdd+count)*nFilt,(filtWidth,),activation='relu',kernel_regularizer=l2))
         mod.add(AveragePooling1D(2))
         mod.add(layers.Dropout(dropProb))
 
@@ -91,7 +92,7 @@ def TestPredictor(paramVec,randomState=10,nEpochs=1200,batchSize=128,modelFile=N
 # Simple version to use with scikit-opt
 def SP(paramList,nEpochs=1200,valSplit=.05,callbacks=[]):
 
-    (f,d,lr,fc6,x1,x,drop,l2)=paramList
+    (f,d,lr,fc6,x1,x,drop,l2,fa)=paramList
     paramVec={}
     paramVec['f']=f
     paramVec['d']=d
@@ -101,6 +102,7 @@ def SP(paramList,nEpochs=1200,valSplit=.05,callbacks=[]):
     paramVec['x']=x
     paramVec['drop']=drop
     paramVec['l2']=l2
+    paramVec['fa']=fa
 
     return TestPredictor(paramVec,nEpochs=nEpochs,valSplit=valSplit,callbacks=callbacks)[1]
     

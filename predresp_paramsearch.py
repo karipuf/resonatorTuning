@@ -15,6 +15,7 @@ ap.add_argument('--l2',help='L2 Regularization constant (default 0.00001)')
 ap.add_argument('-d',help='Number of convolution layers (default: sample from [2,3,4,5])')
 ap.add_argument('--rs',help='Random state for param sampler (default=10)')
 ap.add_argument('--drop',help='dropout probability (default [.2,.3,.4,.5,.6]])')
+ap.add_argument('--fa',help="Number to add to the filter multiplier to increase number of filters per layer (default [1])")
 ap.add_argument('-o',help='Name of file to print result')
 parsed=ap.parse_args()
 
@@ -36,7 +37,8 @@ pDict={'f':ProcessArg(parsed.f,[32,64,96]),
        'lr':ProcessArg(parsed.lr,[0.01,0.005,0.001,0.0005]),
        'd':ProcessArg(parsed.d,[2,3,4,5]),
        'drop':ProcessArg(parsed.drop,[.2,.3,.4,.5,.6]),
-       'l2':ProcessArg(parsed.l2,[.00001,.00005,.00005])
+       'l2':ProcessArg(parsed.l2,[.00001,.00005,.00005]),
+       'fa':ProcessArg(parsed.fa,[1])
 }
 
 # Creating and training models!
