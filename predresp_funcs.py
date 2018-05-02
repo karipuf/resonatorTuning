@@ -1,6 +1,6 @@
 import keras,pdb
 from keras import models,layers,optimizers
-from keras.layers import Conv1D,Dense,MaxPool1D,AveragePooling1D,GlobalAveragePooling1D,BatchNormalization
+from keras.layers import Conv1D,Dense,MaxPool1D,AveragePooling1D,GlobalAveragePooling1D,BatchNormalization,Input
 from keras.optimizers import Adam
 from sklearn.model_selection import train_test_split,ParameterSampler
 import pandas as pd
