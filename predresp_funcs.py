@@ -49,9 +49,6 @@ def CreatePredictor(paramVec): #,l2reg=.00001):
     l2reg=paramVec['l2']
     filtAdd=paramVec['fa']
     
-    #keepProb=paramVec['dp']
-    #l2reg=paramVec['l2']
-
     l2=keras.regularizers.l2(l2reg)
     mod=models.Sequential()
 

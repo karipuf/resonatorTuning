@@ -63,7 +63,7 @@ mod.compile(optimizer=Adam(lr=0.0005),loss='mse')
 # In[27]:
 
 
-mod.fit(resp.values.reshape((-1,256,1)),curr.values,batch_size=128,epochs=1000,validation_split=.1)
+mod.fit(resp.values.reshape((-1,256,1)),curr.values,batch_size=256,epochs=1000,validation_split=.1)
 
 
 # In[79]:
