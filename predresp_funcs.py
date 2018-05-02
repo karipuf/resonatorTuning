@@ -15,17 +15,22 @@ def ProcessArg(tmp,defaultVal):
     if tmp==None: return defaultVal
     else: return eval(tmp)
 
-def GetData(testSize=.05,randomState=10,normalize=True):
+def GetData(testSize=.05,randomState=10,normalize=True,dataFile='Data.txt',paramFile='Parameters.txt'):
+    '''
+    GetData(testSize=.05,randomState=10,normalize=True,dataFile='Data.txt',paramFile='Parameters.txt')
 
+    returns: xtrain,xtest,idealResp,ytrain,ytest,idealCurr
+    '''
+    
     # Loading in the data (Response)
-    resp=pd.read_csv("Data.txt",header=None,sep='\s+').T
+    resp=pd.read_csv(dataFile,header=None,sep='\s+').T
     resp.columns=resp.iloc[0,:]
     resp=resp.iloc[1:,:]
     if normalize:
         resp=(resp-resp.mean())/resp.std()
 
     # "Current" (actually it's the phase and coupling ratios)
-    curr=pd.read_csv("Parameters.txt",header=None,sep='\s+')
+    curr=pd.read_csv(paramFile,header=None,sep='\s+')
     
     # Removing ideal resp and current
     idealResp=resp.iloc[0,:]
