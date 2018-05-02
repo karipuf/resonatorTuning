@@ -36,7 +36,35 @@ def GetData(testSize=.05,randomState=10,normalize=True):
     # Creating test and training sets
     xtrain,xtest,ytrain,ytest=train_test_split(resp,curr,test_size=testSize,random_state=randomState)
     return xtrain,xtest,idealResp,ytrain,ytest,idealCurr
-    
+
+
+def CreateModel(nUnits=[128,256,384],filtWidths=[7,7,5],poolWidths=[2,2,1]):
+  '''
+  Created in CoLab version
+  Creates CNN with arbitrary numbers of units, filter and pool widths
+  
+  '''
+  
+  l2=keras.regularizers.l2(.00001)
+  
+  foo=Input((256,1))
+  inp=foo
+  
+  for nUnit,filtWidth,poolWidth in zip(nUnits,filtWidths,poolWidths):
+    foo=Conv1D(nUnit,(filtWidth,),activation='relu',kernel_regularizer=l2)(foo)
+    foo=AveragePooling1D(poolWidth)(foo)
+    foo=Dropout(.5)(foo)
+  
+  
+  foo=Flatten()(foo)
+  foo=Dense(128,activation='relu')(foo)
+  foo=layers.Dropout(.5)(foo)
+  foo=Dense(8,activation='linear')(foo)
+
+  
+  return models.Model(inputs=inp,outputs=foo)
+
+
 def CreatePredictor(paramVec): #,l2reg=.00001):
 
     nFilt=paramVec['f']
